@@ -27,6 +27,13 @@ const chemistryColor: Record<Battery['chemistry'], string> = {
   Other: 'bg-gray-100 text-gray-800',
 };
 
+const chemistryDescription: Record<Battery['chemistry'], string> = {
+  LFP: 'Lithium Iron Phosphate — very safe, long cycle life',
+  NMC: 'Lithium Nickel Manganese Cobalt — high energy density, widely used in EVs',
+  NCA: 'Lithium Nickel Cobalt Aluminum — very high energy density, used by Tesla',
+  Other: 'Other or unspecified chemistry',
+};
+
 function getPrice(b: Battery): number | null {
   return b.price_us ?? b.price_nl ?? null;
 }
@@ -159,10 +166,15 @@ export default function BatteryListClient({ batteries }: Props) {
               </div>
 
               {/* Chemistry badge */}
-              <div className="w-12 shrink-0">
+              <div className="relative w-12 shrink-0 cursor-help group">
                 <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${chemistryColor[battery.chemistry]}`}>
                   {battery.chemistry}
                 </span>
+                <div className="pointer-events-none absolute bottom-full left-0 mb-1.5 hidden group-hover:block z-10">
+                  <div className="rounded bg-gray-900 px-2 py-1 text-xs text-white whitespace-nowrap shadow-lg">
+                    {chemistryDescription[battery.chemistry]}
+                  </div>
+                </div>
               </div>
 
               {/* Specs */}
