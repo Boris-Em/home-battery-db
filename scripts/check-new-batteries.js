@@ -191,13 +191,14 @@ Return ONLY a valid JSON array. If all are already tracked, return [].`,
 
   const confirmed = extractJsonArray(response.content[0].text);
 
-  // Merge article_url and key_specs back from announced if agent omitted them
+  // Keep all fields from Agent 1 (article_url, pub_date, key_specs, etc.)
+  // Agent 2 only contributes reason_new
   return confirmed.map(c => {
     const original = announced.find(a =>
       a.model?.toLowerCase().includes(c.model?.toLowerCase()) ||
       c.model?.toLowerCase().includes(a.model?.toLowerCase())
     );
-    return { ...original, ...c };
+    return { ...original, reason_new: c.reason_new };
   });
 }
 
