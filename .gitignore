@@ -7,7 +7,12 @@ dist/
 
 # SQLite database (build-time only, not committed)
 *.db
+*.db-shm
+*.db-wal
 *.sqlite
+
+# Claude Code
+.claude/
 
 # Environment
 .env
