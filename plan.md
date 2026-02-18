@@ -52,12 +52,12 @@ Each market has distinct characteristics:
 
 ## Pages
 
-| Page | URL |
-| --- | --- |
-| Battery list (home) | `/` |
-| Battery detail | `/batteries/[slug]` |
-| Brand | `/brands/[slug]` |
-| About | `/about` |
+| Page | URL | What users can do |
+| --- | --- | --- |
+| Battery list (home) | `/` | Browse all batteries, filter by chemistry, capacity, power, backup type, coupling, and market availability; sort by key specs or price |
+| Battery detail | `/batteries/[slug]` | View the full spec sheet for a single battery; access the manufacturer datasheet and product page |
+| Brand | `/brands/[slug]` | Learn about a brand and browse all batteries they offer |
+| About | `/about` | Understand how specs are sourced; report an error or suggest a missing battery |
 
 ---
 
