@@ -1,7 +1,6 @@
 [
   { "name": "PV Magazine", "url": "https://www.pv-magazine.com/feed/" },
   { "name": "PV Magazine USA", "url": "https://pv-magazine-usa.com/feed/" },
-  { "name": "PV Magazine NL", "url": "https://www.pv-magazine.nl/feed/" },
   { "name": "PV Magazine FR", "url": "https://www.pv-magazine.fr/feed/" },
   { "name": "Electrek", "url": "https://electrek.co/feed/" },
   { "name": "CleanTechnica", "url": "https://cleantechnica.com/feed/" },
@@ -9,9 +8,6 @@
   { "name": "PV Tech", "url": "https://www.pv-tech.org/feed/" },
   { "name": "Energy Storage News", "url": "https://www.energy-storage.news/feed/" },
   { "name": "Canary Media", "url": "https://www.canarymedia.com/rss" },
-  { "name": "Recharge News", "url": "https://www.rechargenews.com/rss" },
   { "name": "CleanEnergy Wire", "url": "https://www.cleanenergywire.org/rss.xml" },
-  { "name": "Solar Magazine NL", "url": "https://solarmagazine.nl/feed/" },
-  { "name": "New Atlas", "url": "https://newatlas.com/energy/rss/" },
   { "name": "Energy Monitor", "url": "https://www.energymonitor.ai/feed/" }
 ]

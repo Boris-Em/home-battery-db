@@ -110,7 +110,7 @@ function ColHeader({
 }
 
 export default function BatteryListClient({ batteries }: Props) {
-  const [sortKey, setSortKey] = useState<SortKey>('usable_capacity_kwh');
+  const [sortKey, setSortKey] = useState<SortKey>('released_date');
   const [sortDir, setSortDir] = useState<Direction>('desc');
 
   function handleSort(key: SortKey) {
@@ -146,8 +146,6 @@ export default function BatteryListClient({ batteries }: Props) {
       {/* Rows */}
       <div className="flex flex-col gap-2">
         {sorted.map(battery => {
-          const price = getPrice(battery);
-          const currency = battery.price_us ? '$' : '€';
           return (
             <a
               key={battery.slug}
@@ -161,9 +159,11 @@ export default function BatteryListClient({ batteries }: Props) {
               </div>
 
               {/* Chemistry badge */}
-              <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${chemistryColor[battery.chemistry]}`}>
-                {battery.chemistry}
-              </span>
+              <div className="w-12 shrink-0">
+                <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${chemistryColor[battery.chemistry]}`}>
+                  {battery.chemistry}
+                </span>
+              </div>
 
               {/* Specs */}
               <div className="flex flex-1 items-center gap-6 text-sm">
@@ -191,10 +191,11 @@ export default function BatteryListClient({ batteries }: Props) {
                   {battery.available_fr ? <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">FR</span> : null}
                   {battery.available_us ? <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">US</span> : null}
                 </div>
-                <div className="w-24 text-right">
-                  {price
-                    ? <p className="text-sm font-medium text-gray-900">{currency}{price.toLocaleString()}</p>
-                    : <p className="text-sm text-gray-400">—</p>}
+                <div className="w-24 text-right space-y-0.5">
+                  {battery.price_nl ? <p className="text-sm font-medium text-gray-900"><span className="text-xs">🇳🇱</span> €{battery.price_nl.toLocaleString()}</p> : null}
+                  {battery.price_fr && battery.price_fr !== battery.price_nl ? <p className="text-sm font-medium text-gray-900"><span className="text-xs">🇫🇷</span> €{battery.price_fr.toLocaleString()}</p> : null}
+                  {battery.price_us ? <p className="text-sm font-medium text-gray-900"><span className="text-xs">🇺🇸</span> ${battery.price_us.toLocaleString()}</p> : null}
+                  {!battery.price_nl && !battery.price_fr && !battery.price_us ? <p className="text-sm text-gray-400">—</p> : null}
                 </div>
               </div>
             </a>
