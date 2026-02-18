@@ -31,6 +31,22 @@ const batteries = getAllBatteries();
         </p>
       </div>
 
+      <!-- Column headers -->
+      <div class="flex items-center gap-6 px-5 pb-1 text-xs font-medium uppercase tracking-wide text-gray-400">
+        <div class="w-48 shrink-0">Battery</div>
+        <div class="w-12 shrink-0"></div>
+        <div class="flex flex-1 items-center gap-6">
+          <div class="w-24">Capacity</div>
+          <div class="w-28">Cont. power</div>
+          <div class="w-36 hidden md:block">Backup</div>
+          <div class="w-20 hidden lg:block">Warranty</div>
+        </div>
+        <div class="flex shrink-0 items-center gap-4">
+          <div class="w-16">Markets</div>
+          <div class="w-24 text-right">Price</div>
+        </div>
+      </div>
+
       <div class="flex flex-col gap-2">
         {batteries.map(battery => (
           <BatteryCard battery={battery} />
