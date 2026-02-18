@@ -144,8 +144,7 @@ export default function BatteryListClient({ batteries }: Props) {
           <ColHeader label="Warranty" sortKey="warranty_years" current={sortKey} dir={sortDir} onClick={handleSort} className="w-20 hidden lg:flex" />
           <ColHeader label="Released" sortKey="released_date" current={sortKey} dir={sortDir} onClick={handleSort} className="w-20 hidden lg:flex" />
         </div>
-        <div className="flex shrink-0 items-center gap-4">
-          <div className="w-16" />
+        <div className="flex shrink-0 items-center">
           <ColHeader label="Price" sortKey="price" current={sortKey} dir={sortDir} onClick={handleSort} className="w-24 justify-end" />
         </div>
       </div>
@@ -196,13 +195,8 @@ export default function BatteryListClient({ batteries }: Props) {
                 </div>
               </div>
 
-              {/* Markets + price */}
-              <div className="flex shrink-0 items-center gap-4">
-                <div className="flex gap-1 w-16">
-                  {battery.available_nl ? <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">NL</span> : null}
-                  {battery.available_fr ? <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">FR</span> : null}
-                  {battery.available_us ? <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">US</span> : null}
-                </div>
+              {/* Price */}
+              <div className="flex shrink-0 items-center">
                 <div className="w-24 text-right space-y-0.5">
                   {battery.price_nl ? <p className="text-sm font-medium text-gray-900"><span className="text-xs">🇳🇱</span> €{battery.price_nl.toLocaleString()}</p> : null}
                   {battery.price_fr && battery.price_fr !== battery.price_nl ? <p className="text-sm font-medium text-gray-900"><span className="text-xs">🇫🇷</span> €{battery.price_fr.toLocaleString()}</p> : null}
