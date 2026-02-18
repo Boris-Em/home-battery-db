@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# SQLite database (build-time only, not committed)
+*.db
+*.sqlite
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
