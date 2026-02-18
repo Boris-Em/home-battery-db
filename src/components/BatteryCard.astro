@@ -23,49 +23,52 @@ const chemistryColor = {
 
 <a
   href={`/batteries/${battery.slug}`}
-  class="block rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md hover:border-gray-300"
+  class="flex items-center gap-6 rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm transition hover:shadow-md hover:border-gray-300"
 >
-  <div class="mb-3 flex items-start justify-between gap-2">
-    <div>
-      <p class="text-sm font-medium text-gray-500">{battery.brand_name}</p>
-      <h2 class="text-lg font-semibold text-gray-900">{battery.model}</h2>
-    </div>
-    <span class={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${chemistryColor[battery.chemistry]}`}>
-      {battery.chemistry}
-    </span>
+  <!-- Name -->
+  <div class="min-w-0 w-48 shrink-0">
+    <p class="text-xs font-medium text-gray-500">{battery.brand_name}</p>
+    <h2 class="truncate text-base font-semibold text-gray-900">{battery.model}</h2>
   </div>
 
-  <div class="grid grid-cols-2 gap-3 text-sm">
-    <div>
-      <p class="text-gray-500">Capacity</p>
+  <!-- Chemistry badge -->
+  <span class={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${chemistryColor[battery.chemistry]}`}>
+    {battery.chemistry}
+  </span>
+
+  <!-- Specs -->
+  <div class="flex flex-1 items-center gap-6 text-sm">
+    <div class="w-24">
+      <p class="text-xs text-gray-500">Capacity</p>
       <p class="font-semibold text-gray-900">{battery.usable_capacity_kwh} kWh</p>
     </div>
-    <div>
-      <p class="text-gray-500">Continuous power</p>
+    <div class="w-28">
+      <p class="text-xs text-gray-500">Cont. power</p>
       <p class="font-semibold text-gray-900">{battery.continuous_power_kw} kW</p>
     </div>
-    <div>
-      <p class="text-gray-500">Backup</p>
+    <div class="w-36 hidden md:block">
+      <p class="text-xs text-gray-500">Backup</p>
       <p class="font-semibold text-gray-900">{backupLabel[battery.backup_type]}</p>
     </div>
-    <div>
-      <p class="text-gray-500">Warranty</p>
-      <p class="font-semibold text-gray-900">
-        {battery.warranty_years ? `${battery.warranty_years} yr` : '—'}
-      </p>
+    <div class="w-20 hidden lg:block">
+      <p class="text-xs text-gray-500">Warranty</p>
+      <p class="font-semibold text-gray-900">{battery.warranty_years ? `${battery.warranty_years} yr` : '—'}</p>
     </div>
   </div>
 
-  <div class="mt-4 flex items-center justify-between border-t border-gray-100 pt-3">
-    <div class="flex gap-1.5">
+  <!-- Markets + price -->
+  <div class="flex shrink-0 items-center gap-4">
+    <div class="flex gap-1">
       {battery.available_nl ? <span class="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">NL</span> : null}
       {battery.available_fr ? <span class="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">FR</span> : null}
       {battery.available_us ? <span class="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">US</span> : null}
     </div>
-    {battery.price_us
-      ? <p class="text-sm font-medium text-gray-900">from ${battery.price_us.toLocaleString()}</p>
-      : battery.price_nl
-      ? <p class="text-sm font-medium text-gray-900">from €{battery.price_nl.toLocaleString()}</p>
-      : null}
+    <div class="w-24 text-right">
+      {battery.price_us
+        ? <p class="text-sm font-medium text-gray-900">from ${battery.price_us.toLocaleString()}</p>
+        : battery.price_nl
+        ? <p class="text-sm font-medium text-gray-900">from €{battery.price_nl.toLocaleString()}</p>
+        : <p class="text-sm text-gray-400">—</p>}
+    </div>
   </div>
 </a>
