@@ -18,5 +18,8 @@ dist/
 .env
 .env.*
 
+# Daily battery check output
+data/new-batteries-*.md
+
 # OS
 .DS_Store
