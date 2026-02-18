@@ -52,17 +52,33 @@ Each market has distinct characteristics:
 
 ## Data model
 
-One entity: **Battery**. All data read from SQLite at build time.
+Two entities: **Brand** and **Battery**. All data read from SQLite at build time. Batteries reference brands via `brand_slug`.
+
+## Brand
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `slug` | text | ✅ | URL identifier, e.g. `tesla` |
+| `name` | text | ✅ | e.g. Tesla |
+| `country` | text | — | Country of origin |
+| `website_url` | text | — | |
+| `logo_url` | text | — | |
+| `description` | text | — | One-sentence description |
+
+---
+
+## Battery
 
 ### Identity
 
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
 | `slug` | text | ✅ | URL identifier, e.g. `tesla-powerwall-3` |
-| `brand` | text | ✅ | e.g. Tesla, Sonnen, Enphase |
+| `brand_slug` | text | ✅ | FK → brands.slug |
 | `model` | text | ✅ | e.g. Powerwall 3 |
 | `manufacturer_sku` | text | — | Manufacturer model code e.g. `IQ10T`, `RESU10H-R2` |
 | `status` | enum | ✅ | `available` · `discontinued` · `upcoming` |
+| `released_date` | date | — | Market introduction date; year-only precision is fine |
 | `image_url` | text | — | |
 | `datasheet_url` | text | — | Link to manufacturer PDF |
 | `product_url` | text | — | Manufacturer product page |
