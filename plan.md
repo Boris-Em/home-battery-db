@@ -50,6 +50,17 @@ Each market has distinct characteristics:
 
 ---
 
+## Pages
+
+| Page | URL |
+| --- | --- |
+| Battery list (home) | `/` |
+| Battery detail | `/batteries/[slug]` |
+| Brand | `/brands/[slug]` |
+| About | `/about` |
+
+---
+
 ## Data model
 
 Two entities: **Brand** and **Battery**. All data read from SQLite at build time. Batteries reference brands via `brand_slug`.
