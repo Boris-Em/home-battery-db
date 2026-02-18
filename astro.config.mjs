@@ -10,6 +10,12 @@ export default defineConfig({
   integrations: [react()],
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ['better-sqlite3'],
+    },
+    ssr: {
+      external: ['better-sqlite3'],
+    },
   }
 });

@@ -1,17 +1,42 @@
 ---
+import { getAllBatteries } from '../lib/db';
+import BatteryCard from '../components/BatteryCard.astro';
+import '../styles/global.css';
 
+const batteries = getAllBatteries();
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="The most complete database of home battery systems. Compare specs, filter by your needs, and find the right battery." />
+    <title>Home Battery Database</title>
+  </head>
+  <body class="bg-gray-50 text-gray-900 antialiased">
+
+    <header class="border-b border-gray-200 bg-white">
+      <div class="mx-auto max-w-6xl px-4 py-4">
+        <h1 class="text-lg font-bold tracking-tight">Home Battery DB</h1>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-4 py-8">
+      <div class="mb-6">
+        <p class="text-gray-600">
+          The most complete database of home battery systems —
+          <span class="font-medium text-gray-900">{batteries.length} batteries</span> from {new Set(batteries.map(b => b.brand_slug)).size} brands.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {batteries.map(battery => (
+          <BatteryCard battery={battery} />
+        ))}
+      </div>
+    </main>
+
+  </body>
 </html>
