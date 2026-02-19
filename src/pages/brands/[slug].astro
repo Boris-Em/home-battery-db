@@ -39,6 +39,14 @@ const batteries = getBatteriesByBrandSlug(slug);
       </a>
 
       <div class="mb-8 mt-4">
+        {brand.logo_url && (
+          <img
+            src={brand.logo_url}
+            alt={`${brand.name} logo`}
+            class="mb-4 h-10 w-auto object-contain"
+            onerror="this.style.display='none'"
+          />
+        )}
         <div class="flex items-baseline justify-between gap-4">
           <h1 class="text-2xl font-bold tracking-tight">{brand.name}</h1>
           {brand.website_url && (
