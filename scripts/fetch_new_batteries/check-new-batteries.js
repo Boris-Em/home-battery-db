@@ -6,7 +6,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import Database from 'better-sqlite3';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, '..');
+const ROOT = join(__dirname, '../..');
 const DATA_DIR = join(ROOT, 'data');
 
 // ---------------------------------------------------------------------------
@@ -19,7 +19,7 @@ if (!process.env.ANTHROPIC_API_KEY) {
   process.exit(1);
 }
 
-const feeds = JSON.parse(fs.readFileSync(join(DATA_DIR, 'rss-feeds.json'), 'utf-8'));
+const feeds = JSON.parse(fs.readFileSync(join(__dirname, 'rss-feeds.json'), 'utf-8'));
 const client = new Anthropic();
 
 // ---------------------------------------------------------------------------
