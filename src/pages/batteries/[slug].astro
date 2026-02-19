@@ -1,0 +1,228 @@
+---
+import { getAllBatteries, getBatteryBySlug } from '../../lib/db';
+import '../../styles/global.css';
+
+export function getStaticPaths() {
+  const batteries = getAllBatteries();
+  return batteries.map(b => ({ params: { slug: b.slug } }));
+}
+
+const { slug } = Astro.params;
+const battery = getBatteryBySlug(slug);
+if (!battery) return Astro.redirect('/');
+
+const backupLabel: Record<string, string> = {
+  none: 'No backup',
+  essential_circuits: 'Essential circuits',
+  whole_home: 'Whole-home',
+};
+
+const statusLabel: Record<string, string> = {
+  available: 'Available',
+  discontinued: 'Discontinued',
+  upcoming: 'Upcoming',
+};
+
+const statusColor: Record<string, string> = {
+  available: 'bg-green-100 text-green-800',
+  discontinued: 'bg-gray-100 text-gray-600',
+  upcoming: 'bg-blue-100 text-blue-800',
+};
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={`${battery.brand_name} ${battery.model} — ${battery.usable_capacity_kwh} kWh, ${battery.continuous_power_kw} kW continuous power.`} />
+    <title>{battery.brand_name} {battery.model} — Home Battery DB</title>
+  </head>
+  <body class="bg-gray-50 text-gray-900 antialiased">
+
+    <header class="border-b border-gray-200 bg-white">
+      <div class="mx-auto max-w-6xl px-4 py-4">
+        <a href="/" class="text-lg font-bold tracking-tight hover:text-gray-600 transition-colors">Home Battery DB</a>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-4 py-8">
+
+      <a href="/" class="mb-6 inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+        ← All batteries
+      </a>
+
+      {/* Header */}
+      <div class="mt-4 mb-8">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <a href={`/brands/${battery.brand_slug}`} class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
+              {battery.brand_name}
+            </a>
+            <h1 class="text-3xl font-bold tracking-tight mt-0.5">{battery.model}</h1>
+            <div class="mt-2 flex items-center gap-2">
+              <span class={`rounded-full px-2.5 py-0.5 text-xs font-medium ${statusColor[battery.status]}`}>
+                {statusLabel[battery.status]}
+              </span>
+              {battery.released_date && (
+                <span class="text-sm text-gray-500">Released {battery.released_date.slice(0, 4)}</span>
+              )}
+              {battery.manufacturer_sku && (
+                <span class="text-sm text-gray-400">SKU: {battery.manufacturer_sku}</span>
+              )}
+            </div>
+          </div>
+          <div class="flex shrink-0 gap-3">
+            {battery.datasheet_url && (
+              <a href={battery.datasheet_url} target="_blank" rel="noopener noreferrer"
+                class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-600 hover:border-gray-300 hover:text-gray-900 transition-colors">
+                Datasheet ↗
+              </a>
+            )}
+            {battery.product_url && (
+              <a href={battery.product_url} target="_blank" rel="noopener noreferrer"
+                class="rounded-lg bg-gray-900 px-3 py-1.5 text-sm text-white hover:bg-gray-700 transition-colors">
+                Product page ↗
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Hero stats */}
+      <div class="mb-8 grid grid-cols-3 gap-4">
+        <div class="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
+          <p class="text-xs font-medium uppercase tracking-wide text-gray-400">Usable capacity</p>
+          <p class="mt-1 text-3xl font-bold">{battery.usable_capacity_kwh} <span class="text-lg font-medium text-gray-500">kWh</span></p>
+          {battery.total_capacity_kwh && (
+            <p class="mt-0.5 text-xs text-gray-400">{battery.total_capacity_kwh} kWh total</p>
+          )}
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
+          <p class="text-xs font-medium uppercase tracking-wide text-gray-400">Continuous power</p>
+          <p class="mt-1 text-3xl font-bold">{battery.continuous_power_kw} <span class="text-lg font-medium text-gray-500">kW</span></p>
+          <p class="mt-0.5 text-xs text-gray-400">{battery.peak_power_kw ? `${battery.peak_power_kw} kW peak` : 'Peak: —'}</p>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
+          <p class="text-xs font-medium uppercase tracking-wide text-gray-400">Backup</p>
+          <p class="mt-1 text-2xl font-bold">{backupLabel[battery.backup_type]}</p>
+          {battery.scalable ? (
+            <p class="mt-0.5 text-xs text-gray-400">Scalable</p>
+          ) : null}
+        </div>
+      </div>
+
+      {/* Spec sections */}
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+
+        {/* Technology */}
+        <div class="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
+          <h2 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-400">Technology</h2>
+          <dl class="space-y-3">
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Chemistry</dt>
+              <dd class="text-sm font-medium">{battery.chemistry}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Coupling</dt>
+              <dd class="text-sm font-medium">{battery.ac_coupled ? 'AC-coupled' : 'DC-coupled'}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Round-trip efficiency</dt>
+              <dd class="text-sm font-medium">{battery.roundtrip_efficiency_pct ? `${battery.roundtrip_efficiency_pct}%` : '—'}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Depth of discharge</dt>
+              <dd class="text-sm font-medium">{battery.depth_of_discharge_pct ? `${battery.depth_of_discharge_pct}%` : '—'}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Max charge rate</dt>
+              <dd class="text-sm font-medium">{battery.max_charge_rate_kw ? `${battery.max_charge_rate_kw} kW` : '—'}</dd>
+            </div>
+          </dl>
+        </div>
+
+        {/* Warranty */}
+        <div class="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
+          <h2 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-400">Warranty</h2>
+          <dl class="space-y-3">
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Duration</dt>
+              <dd class="text-sm font-medium">{battery.warranty_years ? `${battery.warranty_years} years` : '—'}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Cycle count</dt>
+              <dd class="text-sm font-medium">{battery.warranty_cycles ? `${battery.warranty_cycles.toLocaleString()} cycles` : '—'}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Throughput</dt>
+              <dd class="text-sm font-medium">{battery.warranty_throughput_kwh ? `${(battery.warranty_throughput_kwh / 1000).toFixed(0)} MWh` : '—'}</dd>
+            </div>
+          </dl>
+        </div>
+
+        {/* Physical */}
+        <div class="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
+          <h2 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-400">Physical</h2>
+          <dl class="space-y-3">
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Weight</dt>
+              <dd class="text-sm font-medium">{battery.weight_kg ? `${battery.weight_kg} kg` : '—'}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Installation</dt>
+              <dd class="text-sm font-medium">
+                {[battery.indoor_rated && 'Indoor', battery.outdoor_rated && 'Outdoor'].filter(Boolean).join(' / ') || '—'}
+              </dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">IP rating</dt>
+              <dd class="text-sm font-medium">{battery.ip_rating ?? '—'}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">Operating temperature</dt>
+              <dd class="text-sm font-medium">
+                {battery.operating_temp_min_c !== null && battery.operating_temp_max_c !== null
+                  ? `${battery.operating_temp_min_c}°C to ${battery.operating_temp_max_c}°C`
+                  : '—'}
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        {/* Pricing */}
+        <div class="rounded-xl border border-gray-200 bg-white px-6 py-5 shadow-sm">
+          <h2 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-400">Pricing</h2>
+          <dl class="space-y-3">
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">🇳🇱 Netherlands</dt>
+              <dd class="text-sm font-medium">{battery.price_nl ? `€${battery.price_nl.toLocaleString()}` : '—'}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">🇫🇷 France</dt>
+              <dd class="text-sm font-medium">{battery.price_fr ? `€${battery.price_fr.toLocaleString()}` : '—'}</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-sm text-gray-500">🇺🇸 United States</dt>
+              <dd class="text-sm font-medium">{battery.price_us ? `$${battery.price_us.toLocaleString()}` : '—'}</dd>
+            </div>
+            {battery.price_note && (
+              <p class="text-xs text-gray-400 pt-1">{battery.price_note}</p>
+            )}
+          </dl>
+        </div>
+
+      </div>
+
+      {/* Notes */}
+      {battery.notes && (
+        <div class="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-6 py-4">
+          <p class="text-sm text-amber-800">{battery.notes}</p>
+        </div>
+      )}
+
+    </main>
+
+  </body>
+</html>
