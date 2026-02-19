@@ -160,7 +160,12 @@ export default function BatteryListClient({ batteries }: Props) {
             >
               {/* Name */}
               <div className="min-w-0 w-48 shrink-0">
-                <p className="text-xs font-medium text-gray-500">{battery.brand_name}</p>
+                <span
+                  className="text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline cursor-pointer"
+                  onClick={e => { e.preventDefault(); e.stopPropagation(); window.location.href = `/brands/${battery.brand_slug}`; }}
+                >
+                  {battery.brand_name}
+                </span>
                 <h2 className="truncate text-base font-semibold text-gray-900">{battery.model}</h2>
               </div>
 

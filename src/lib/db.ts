@@ -41,6 +41,19 @@ export function getAllBrands(): Brand[] {
   return rows;
 }
 
+export function getBatteriesByBrandSlug(brandSlug: string): Battery[] {
+  const db = openDb();
+  const rows = db.prepare(`
+    SELECT b.*, br.name AS brand_name
+    FROM batteries b
+    JOIN brands br ON b.brand_slug = br.slug
+    WHERE b.brand_slug = ?
+    ORDER BY b.released_date DESC
+  `).all(brandSlug) as Battery[];
+  db.close();
+  return rows;
+}
+
 export function getBrandBySlug(slug: string): Brand | null {
   const db = openDb();
   const row = db.prepare(`SELECT * FROM brands WHERE slug = ?`).get(slug) as Brand | undefined;

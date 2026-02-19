@@ -1,0 +1,70 @@
+---
+import { getAllBrands, getBrandBySlug, getBatteriesByBrandSlug } from '../../lib/db';
+import BatteryListClient from '../../components/BatteryListClient';
+import '../../styles/global.css';
+
+export function getStaticPaths() {
+  const brands = getAllBrands();
+  return brands.map(brand => ({ params: { slug: brand.slug } }));
+}
+
+const { slug } = Astro.params;
+const brand = getBrandBySlug(slug);
+if (!brand) return Astro.redirect('/');
+
+const batteries = getBatteriesByBrandSlug(slug);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={`${brand.name} home battery systems — specs, pricing, and comparisons.`} />
+    <title>{brand.name} — Home Battery DB</title>
+  </head>
+  <body class="bg-gray-50 text-gray-900 antialiased">
+
+    <header class="border-b border-gray-200 bg-white">
+      <div class="mx-auto max-w-6xl px-4 py-4">
+        <a href="/" class="text-lg font-bold tracking-tight hover:text-gray-600 transition-colors">Home Battery DB</a>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-4 py-8">
+
+      <a href="/" class="mb-6 inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+        ← All batteries
+      </a>
+
+      <div class="mb-8 mt-4">
+        <div class="flex items-baseline justify-between gap-4">
+          <h1 class="text-2xl font-bold tracking-tight">{brand.name}</h1>
+          {brand.website_url && (
+            <a
+              href={brand.website_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm text-gray-500 hover:text-gray-900 transition-colors shrink-0"
+            >
+              Website ↗
+            </a>
+          )}
+        </div>
+        {brand.country && <p class="mt-1 text-sm text-gray-500">{brand.country}</p>}
+        {brand.description && <p class="mt-3 text-gray-600 max-w-2xl">{brand.description}</p>}
+      </div>
+
+      <div class="mb-6">
+        <p class="text-gray-600">
+          <span class="font-medium text-gray-900">{batteries.length} {batteries.length === 1 ? 'battery' : 'batteries'}</span> in our database
+        </p>
+      </div>
+
+      <BatteryListClient batteries={batteries} client:load />
+
+    </main>
+
+  </body>
+</html>
