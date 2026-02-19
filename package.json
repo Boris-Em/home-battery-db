@@ -8,7 +8,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "db:seed": "node scripts/seed.js",
-    "check": "node --env-file=.env scripts/check-new-batteries.js"
+    "check": "node --env-file=.env scripts/fetch_new_batteries/check-new-batteries.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.3",
